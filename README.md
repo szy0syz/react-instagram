@@ -73,6 +73,15 @@ export default Instagram;
 * resolve
     * alias 配置别名，方便文件绝对路径指向
 * devServer 开发配置
+    * 指定 contentBase 内容路径
+    * historyApiFallback 使用h5的前端路由时所有404响应转到首页index.html
+    * `compress: true`  开发环境启用gzip
+    * overlay 全屏显示编译错误
+    * disableHostCheck 禁用主机检查，开发环境没必要
+* plugins 插件数组
+    * HtmlWebpackPlugin webpack打包html文件
+        * 安装依赖 `yarn add -D html-webpack-plugin` 
+    * HotModuleReplacementPlugin webpack热更替插件，改变后不需要全部重新打包
 
 ```js
 const path = require('path');
@@ -132,7 +141,26 @@ module.exports = {
     }
   },
   devServer: {
-    
-  }
+    contentBase: path.resolve(clientPath, "dist"),
+    historyApiFallback: true,
+    host: '127.0.0.1',
+    port: 7000,
+    inline: true,
+    hot: true,
+    compress: true,
+    overlay: true,
+    open: true,
+    disableHostCheck: true,
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: path.resolve(clientPath, 'index.html'),
+      filename: 'index.html',
+      // favicon: path.relative(clientPath, 'assets/image/favcion.ico')
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 }
 ```
+
+> 因为 babel-loader 8 更新太快，相关preseet还没更新支持8，故将babel-loader 降级到7.1.5版本。
