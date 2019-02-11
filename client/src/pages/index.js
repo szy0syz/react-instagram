@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from "react";
 
-class Instagram extends Component {
+class Instagram extends React.Component {
   render() {
-    <h2>
-      Instagram
-    </h2>
+    return <h2>Instagram</h2>;
   }
 }
 

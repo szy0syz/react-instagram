@@ -55,6 +55,23 @@ module.exports = {
     }
   },
   devServer: {
-    
-  }
+    contentBase: path.resolve(clientPath, "dist"),
+    historyApiFallback: true,
+    host: '127.0.0.1',
+    port: 7000,
+    inline: true,
+    hot: true,
+    compress: true,
+    overlay: true,
+    open: true,
+    disableHostCheck: true,
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: path.resolve(clientPath, 'index.html'),
+      filename: 'index.html',
+      // favicon: path.relative(clientPath, 'assets/image/favcion.ico')
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 }

@@ -6,5 +6,5 @@ import Instagram from './src/pages/index'
 // 渲染根组件
 ReactDOM.render(
   <Instagram />,
-  document.getElementById('root'),
+  document.getElementById('root')
 );
