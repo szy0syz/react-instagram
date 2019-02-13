@@ -1,9 +1,9 @@
-const path = require('path');
+const path = require('path')
 // ‘html-webpack-plugin’ 插件负责加载html模板填值
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 // 转换解决当前项目的路径
-const clientPath = path.resolve(__dirname);
+const clientPath = path.resolve(__dirname)
 
 module.exports = {
   entry: {
@@ -55,7 +55,7 @@ module.exports = {
     }
   },
   devServer: {
-    contentBase: path.resolve(clientPath, "dist"),
+    contentBase: path.resolve(clientPath, 'dist'),
     historyApiFallback: true,
     host: '127.0.0.1',
     port: 7000,
@@ -68,14 +68,14 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:7001',
-        changeOrigin: true,
+        changeOrigin: true
       }
-    }
+    } //重定向
   },
   plugins: [
     new HtmlWebPackPlugin({
       template: path.resolve(clientPath, 'index.html'),
-      filename: 'index.html',
+      filename: 'index.html'
       // favicon: path.relative(clientPath, 'assets/image/favcion.ico')
     }),
     new webpack.HotModuleReplacementPlugin()
