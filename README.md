@@ -179,15 +179,15 @@ module.exports = {
 ```bash
 # .babelrc
 "plugins": [
-    [
-      "import",
-      {
-        "libraryName": "antd",
-        "libraryDirectory": "es",
-        "style": "css"
-      }
-    ]
+  [
+    "import",
+    {
+      "libraryName": "antd",
+      "libraryDirectory": "es",
+      "style": "css"
+    }
   ]
+]
 ```
 
 > 问题：如何实现babel的按需加载？ 回答：使用babel的插件，插件名 `babel-plugin-import`，然后配置 `.babelrc` 即可。
@@ -221,7 +221,8 @@ module.exports = {
 }
 ```
 
-    其实这里会有问题，那就是在node_modules里的框架css文件其实也需要经过loader编辑，但我们为了避免框架css模块化，已经没对他们加载。所以我们只能再专门为框架的css处理loader
+    其实这里会有问题，那就是在node_modules里的框架css文件其实也需要经过loader编辑，但我们为了避免框架css模块化，已经没对他们加载。所以我们只能再专门为框架的css处理loader。
+    因为是文件流，我们再定义一个rule来处理文件即可！
 
 ```js
 {
