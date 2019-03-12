@@ -1,18 +1,18 @@
-const path = require('path')
+const path = require("path");
 // ‘html-webpack-plugin’ 插件负责加载html模板填值
-const HtmlWebPackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 // 转换解决当前项目的路径
-const clientPath = path.resolve(__dirname)
+const clientPath = path.resolve(__dirname);
 
 module.exports = {
   entry: {
-    main: path.resolve(clientPath, 'index.js')
+    main: path.resolve(clientPath, "index.js")
   },
   output: {
-    publicPath: '/',
-    path: path.resolve(clientPath, 'dist'),
-    filename: 'src/[name].js'
+    publicPath: "/",
+    path: path.resolve(clientPath, "dist"),
+    filename: "src/[name].js"
   },
   module: {
     rules: [
@@ -20,44 +20,59 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: "babel-loader"
         }
       },
       {
         test: /\.(png|jpg|gif)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'url-loader',
+          loader: "url-loader",
           options: {
             limit: 8192
           }
         }
       },
       {
-        test: /\.(css|less|sass)$/,
+        test: /\.(css|less|scss)$/,
+        use: [
+          "style-loader",
+          // "css-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+              localIdentName: "[local]--[hash:base64:8]"
+            }
+          },
+          "sass-loader"
+        ],
         exclude: /node_modules/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 8192
-          }
-        }
+      },
+      {
+        test: /\.(css|less|scss)$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader"
+        ],
+        include: /node_modules/,
       }
     ]
   },
   resolve: {
     alias: {
-      '@': clientPath,
-      '@scss': path.resolve(clientPath, 'assets/style'),
-      '@assets': path.resolve(clientPath, 'assets'),
-      '@components': path.resolve(clientPath, 'src/components'),
-      '@common': path.resolve(clientPath, 'src/common')
+      "@": clientPath,
+      "@scss": path.resolve(clientPath, "assets/style"),
+      "@assets": path.resolve(clientPath, "assets"),
+      "@components": path.resolve(clientPath, "src/components"),
+      "@common": path.resolve(clientPath, "src/common")
     }
   },
   devServer: {
-    contentBase: path.resolve(clientPath, 'dist'),
+    contentBase: path.resolve(clientPath, "dist"),
     historyApiFallback: true,
-    host: '127.0.0.1',
+    host: "127.0.0.1",
     port: 7000,
     inline: true,
     hot: true,
@@ -66,18 +81,18 @@ module.exports = {
     open: true,
     disableHostCheck: true,
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:7001',
+      "/api": {
+        target: "http://127.0.0.1:7001",
         changeOrigin: true
       }
     } //重定向
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: path.resolve(clientPath, 'index.html'),
-      filename: 'index.html'
+      template: path.resolve(clientPath, "index.html"),
+      filename: "index.html"
       // favicon: path.relative(clientPath, 'assets/image/favcion.ico')
     }),
     new webpack.HotModuleReplacementPlugin()
   ]
-}
+};

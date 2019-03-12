@@ -164,3 +164,100 @@ module.exports = {
 ```
 
 > 因为 babel-loader 8 更新太快，相关preseet还没更新支持8，故将babel-loader 降级到7.1.5版本。
+
+
+## 02 Egg后端初始化
+
+> 略过
+
+## 03 跨域和Nav组件
+
+首先肯定是在 `page/index` 的首页引入Nav组件，那就在 `Components` 文件夹新建组件。
+
+因为组件需要使用 `antd` 前端库，所以得修改babel的配置 `.babelrc`，使得我们的 antd 组件支持按需加载。
+
+```bash
+# .babelrc
+"plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css"
+      }
+    ]
+  ]
+```
+
+> 问题：如何实现babel的按需加载？ 回答：使用babel的插件，插件名 `babel-plugin-import`，然后配置 `.babelrc` 即可。
+
+安装babel的插件、antd和react的路由： `npm i -S antd react-router-dom babel-plugin-import` 
+
+**webpack实现css的local功能**
+
+既然想到了webpack和css，先拿出配置来看看：`use: ['style-loader', 'css-loader', 'sass-loader']`，其实只需要在当前的文件流中，在配置css-loader时启用模块化即可
+
+```js
+{
+  test: /\.(css|less|scss)$/,
+  use: [ 
+    'style-loader',
+  {
+    loader: 'css-loader',
+    options: {
+      modules: true,
+      localIdentName: '[local]--[hash:base64:5]'
+    }
+  }, 
+  'sass-loader' ]
+}
+```
+
+修改scss文件支持css模块化
+```scss
+:local(.page-header) {
+  position: fixed;
+}
+```
+
+    其实这里会有问题，那就是在node_modules里的框架css文件其实也需要经过loader编辑，但我们为了避免框架css模块化，已经没对他们加载。所以我们只能再专门为框架的css处理loader
+
+```js
+{
+  test: /\.(css|less|scss)$/,
+  use: [
+    "style-loader",
+    // "css-loader",
+    {
+      loader: "css-loader",
+      options: {
+        modules: true,
+        localIdentName: "[local]--[hash:base64:8]"
+      }
+    },
+    "sass-loader"
+  ],
+  exclude: /node_modules/,
+},
+{
+  test: /\.(css|less|scss)$/,
+  use: [
+    "style-loader",
+    "css-loader",
+    "sass-loader"
+  ],
+  include: /node_modules/,
+}
+```
+
+### webpack dev重定向
+
+```js
+proxy: {
+  "/api": {
+    target: "http://127.0.0.1:7001",
+    changeOrigin: true
+  }
+} //重定向
+```
