@@ -262,3 +262,20 @@ proxy: {
   }
 } //重定向
 ```
+
+## 05 Egg后端实现注册功能
+
+* 关闭egg的csrf安全验证
+
+* 使用egg的api版本插件实现api的版本控制
+
+`npm i -S egg-router-plus`
+
+```js
+const api_v2_Router = app.router.namespace('/api/v2');
+  api_v2_Router.post('/login/register', controller.login.register);
+```
+
+* 初始化数据库连接
+
+`npm i -S mongoose`
